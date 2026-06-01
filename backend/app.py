@@ -26,29 +26,29 @@ def create_app(config_name='development'):
     migrate.init_app(app, db)
     CORS(app, origins=app.config['CORS_ORIGINS'])
     
-    from routes.auth import auth_bp
-    from routes.users import users_bp
-    from routes.accounts import accounts_bp
-    from routes.transactions import transactions_bp
-    from routes.game import game_bp
-    from routes.payments import payments_bp
-    from routes.qrcode import qrcode_bp
-    from routes.admin import admin_bp
-    
-    app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
-    app.register_blueprint(users_bp, url_prefix='/api/v1/users')
-    app.register_blueprint(accounts_bp, url_prefix='/api/v1/accounts')
-    app.register_blueprint(transactions_bp, url_prefix='/api/v1/transactions')
-    app.register_blueprint(game_bp, url_prefix='/api/v1/game')
-    app.register_blueprint(payments_bp, url_prefix='/api/v1/payments')
-    app.register_blueprint(qrcode_bp, url_prefix='/api/v1/qrcode')
-    app.register_blueprint(admin_bp, url_prefix='/api/v1/admin')
+    with app.app_context():
+        from routes.auth import auth_bp
+        from routes.users import users_bp
+        from routes.accounts import accounts_bp
+        from routes.transactions import transactions_bp
+        from routes.game import game_bp
+        from routes.payments import payments_bp
+        from routes.qrcode import qrcode_bp
+        from routes.admin import admin_bp
+        
+        app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
+        app.register_blueprint(users_bp, url_prefix='/api/v1/users')
+        app.register_blueprint(accounts_bp, url_prefix='/api/v1/accounts')
+        app.register_blueprint(transactions_bp, url_prefix='/api/v1/transactions')
+        app.register_blueprint(game_bp, url_prefix='/api/v1/game')
+        app.register_blueprint(payments_bp, url_prefix='/api/v1/payments')
+        app.register_blueprint(qrcode_bp, url_prefix='/api/v1/qrcode')
+        app.register_blueprint(admin_bp, url_prefix='/api/v1/admin')
+        
+        db.create_all()
     
     setup_logging(app)
     register_error_handlers(app)
-    
-    with app.app_context():
-        db.create_all()
     
     return app
 
